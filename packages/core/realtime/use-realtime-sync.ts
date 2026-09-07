@@ -975,6 +975,14 @@ export function useRealtimeSync(
       // every message would flood the network. Specific chat handlers below
       // still receive it via ws.on() (a separate subscription channel).
       "task:message",
+      // task:progress likewise: it fires every few seconds for the whole
+      // lifetime of an agent run, and its payload (summary/step/total) is
+      // broadcast-only — ReportProgress writes nothing to the DB, so none of
+      // the eight caches the task-prefix invalidation refreshes can have
+      // changed. The real lifecycle transitions (queued / dispatch / running
+      // / completed / failed / cancelled) keep flowing through the prefix
+      // invalidation.
+      "task:progress",
       // task:completed / task:failed deliberately NOT here. They go through
       // both the task-prefix invalidate (refreshes the agent-task-snapshot
       // cache) AND the chat-specific ws.on() handlers below. The two
