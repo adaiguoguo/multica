@@ -1738,7 +1738,7 @@ func (h *Handler) CreateComment(w http.ResponseWriter, r *http.Request) {
 
 	req.ClientRequestID = strings.TrimSpace(req.ClientRequestID)
 	if len(req.ClientRequestID) > maxClientRequestIDLength {
-		writeError(w, http.StatusBadRequest, "client_request_id must be at most 128 characters")
+		writeError(w, http.StatusBadRequest, "client_request_id must be at most 128 bytes")
 		return
 	}
 	// Idempotent replay: a comment with this key already exists on this
